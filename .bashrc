@@ -49,7 +49,7 @@ alias update='sudo pacman -Syu' # Pacman
 #alias update='sudo apt-get update; sudo apt-get upgrade' # Aptitude
 alias diskspace='du -hS | sort -n -r | more'
 alias rsync='rsync -axvuP'
-alias config='/usr/bin/git --git-dir=/home/jcheshire/.cfg/ --work-tree=/home/jcheshire'
+alias config='/usr/bin/git --git-dir=$HOME/.cfg/ --work-tree=$HOME'
 
 
 # script to extract archives
