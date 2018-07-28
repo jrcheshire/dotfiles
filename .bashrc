@@ -105,14 +105,14 @@ if [[ $HOSTNAME =~ .*"rclogin".* ]] || [[ $HOSTNAME =~ .*"holybicep".* ]]; then
     
     function loadmatlab()
     {
-        module unload matlab
-        module load bicepkeck
+	module unload bicepkeck/3.0.0
+        module load bicepkeck/2.0.0
         alias matlab='matlab -nodesktop -nosplash -singleCompThread'
     }
     function loadmatlablatest()
     {
-        module unload bicepkeck
-        module load matlab
+        module unload bicepkeck/2.0.0
+        module load bicepkeck/3.0.0
         alias matlab='matlab -nodesktop -nosplash -singleCompThread'
     }
     
