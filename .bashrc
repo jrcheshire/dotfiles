@@ -88,7 +88,7 @@ if [[ $HOSTNAME =~ .*"rclogin".* ]] || [[ $HOSTNAME =~ .*"holybicep".* ]]; then
 
     # find and load modules
     if [[ $HOSTNAME =~ .*"holybicep".* ]]; then
-        module use /n/holylfs/LABS/kovac_lab/general/software/modulefiles
+        module use /n/holylfs02/LABS/kovac_lab/general/software/modulefiles
         module load bicepkeck
         module load tmux
     fi
