@@ -7,7 +7,7 @@
 
 # -- History --
 
-HISTFILE="~/.zsh_history"
+HISTFILE=~/.zsh_history
 HISTSIZE=1000
 SAVEHIST=5000
 
@@ -22,25 +22,23 @@ setopt prompt_subst
 PROMPT=$'\e[37m┌[%B%n@\e[31m%M\e[37m%b]\e[0m\e[37m%B────%b[%B%~%b]\e[0m
 \e[37m└─☉\e[0m '
 
+export SUDO_PROMPT=$'\e[37m[\e[31;1msudo\e[0m]\e[37m password for \e[37;1m%p\e[0m\e[37m:\e[0m '
+
 # -- Aliases --
 
-# ssh aliases
-alias ssh="ssh -YC"
-#alias odyssey="ssh jcheshire@login.rc.fas.harvard.edu"
-#alias holybicep="ssh holybicep01"
-#alias spudws4="ssh jcheshire@spudws4.spa.umn.edu"
-
 # Utility aliases
+alias ssh="ssh -YC"
 alias ...="cd ../../"
 alias ....="cd ../../../"
 alias .....="cd ../../../../"
 alias ls="ls -B --color=tty"
 alias ll="ls -alh --color=tty"
 alias diskspace="du -hS --max-depth=1 | sort -n -r | more"
-alias rsync="rsync -avuEP"
+alias rsync="rsync -axvuEP"
 alias emacs="emacs -nw"
-alias nvpnreconnect="nordvpn disconnect && nordvpn connect"
-
+alias nvrc="nordvpn disconnect && nordvpn connect"
+alias thesiscompile='rm *.aux *.bbl *.blg *.dvi *.lof *.lot *.out *.xml *.toc ; pdflatex main && bibtex main && pdflatex main && pdflatex main'
+alias updatekitty='curl -L https://sw.kovidgoyal.net/kitty/installer.sh | sh /dev/stdin'
 # -- Miscellaneous --
 
 set -k # Allow comments in the shell
@@ -69,46 +67,21 @@ extract () {
     fi
 }
 
-# -- Harvard FAS RC Odyssey cluster --
-
-if [[ $HOSTNAME =~ .*"rclogin".* ]] || [[ $HOSTNAME =~ .*"holybicep".* ]]; then
-
-    # Source global definitions
-    if [ -f /etc/bashrc ]; then
-	. /etc/bashrc
+ca () {
+    conda activate $1
+    if [ ! -z "$CONDA_DEFAULT_ENV" ]
+    then
+	#PROMPT+="($CONDA_DEFAULT_ENV) "
+	PROMPT="${PROMPT:0:56}($CONDA_DEFAULT_ENV)${PROMPT:56}"
     fi
+}
 
-    # enable group write permissions
-    umask 002
-
-    # find and load modules
-    if [[ $HOSTNAME =~ .*"holybicep".* ]]; then
-        module use /n/holylfs/LABS/kovac_lab/general/software/modulefiles
-        module load bicepkeck
-        # module load tmux
-    fi
-
-    # aliases
-    alias holybicep='ssh -YC jcheshire@holybicep01'
-    alias matlab='matlab -nodesktop -nosplash'
-    alias sq='squeue -u jcheshire -o "%.12i %.9P %.8u %.2t %.10M %.15R  %j"'
-    alias sqq='/usr/bin/squeue -u jcheshire -o "%.12i %.9P %.8u %.2t %.10M %.15R  %j"'
-    alias emacs='emacs -nw'
-    
-    function loadmatlab()
-    {
-        module unload matlab
-        module load bicepkeck
-        alias matlab='matlab -nodesktop -nosplash -singleCompThread'
-    }
-    function loadmatlablatest()
-    {
-        module unload bicepkeck
-        module load matlab
-        alias matlab='matlab -nodesktop -nosplash -singleCompThread'
-    }
-    
-fi
+cda () {
+    # this might get mangled if you're nesting envs...
+    conda deactivate
+    PROMPT=$'\e[37m┌[%B%n@\e[31m%M\e[37m%b]\e[0m\e[37m%B────%b[%B%~%b]\e[0m
+\e[37m└─☉\e[0m '
+}
 
 # -- Autocompletion --
 
@@ -181,3 +154,4 @@ if (( ${+terminfo[smkx]} && ${+terminfo[rmkx]} )); then
 	add-zle-hook-widget -Uz zle-line-init zle_application_mode_start
 	add-zle-hook-widget -Uz zle-line-finish zle_application_mode_stop
 fi
+[ -f /opt/mambaforge/etc/profile.d/conda.sh ] && source /opt/mambaforge/etc/profile.d/conda.sh
