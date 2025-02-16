@@ -1,0 +1,19 @@
+# Utility aliases
+alias ssh="ssh -YC"
+alias ...="cd ../../"
+alias ....="cd ../../../"
+alias .....="cd ../../../../"
+alias ls="ls -B --color=tty"
+alias ll="ls -alh --color=tty"
+alias diskspace="du -hS --max-depth=1 | sort -n -r | more"
+alias rsync="rsync -axvuEP"
+alias emacs="emacs -nw"
+alias nvrc="nordvpn disconnect && nordvpn connect"
+alias thesiscompile='rm *.aux *.bbl *.blg *.dvi *.lof *.lot *.out *.xml *.toc ; pdflatex main && bibtex main && pdflatex main && pdflatex main'
+alias updatekitty='curl -L https://sw.kovidgoyal.net/kitty/installer.sh | sh /dev/stdin'
+# -- Miscellaneous --
+alias wall="/home/jamie/gwall.sh"
+alias matlab="matlab -nodesktop -nosplash"
+
+alias ca="conda activate"
+alias cda="conda deactivate"

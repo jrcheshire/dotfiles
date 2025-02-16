@@ -1,13 +1,11 @@
 # .zshrc
 # James R Cheshire IV
 #
-# last updated 2019/06/23
-
-#source .zshenv
+# last updated 2025/02/16
 
 # -- History --
 
-HISTFILE="~/.zsh_history"
+HISTFILE=~/.zsh_history
 HISTSIZE=1000
 SAVEHIST=5000
 
@@ -18,97 +16,16 @@ bindkey -e
 setopt prompt_subst
 
 # -- Prompt --
-
-PROMPT=$'\e[37m┌[%B%n@\e[31m%M\e[37m%b]\e[0m\e[37m%B────%b[%B%~%b]\e[0m
-\e[37m└─☉\e[0m '
+autoload -Uz add-zsh-hook
+add-zsh-hook precmd set-prompt
 
 # -- Aliases --
-
-# ssh aliases
-alias ssh="ssh -YC"
-#alias odyssey="ssh jcheshire@login.rc.fas.harvard.edu"
-#alias holybicep="ssh holybicep01"
-#alias spudws4="ssh jcheshire@spudws4.spa.umn.edu"
-
-# Utility aliases
-alias ...="cd ../../"
-alias ....="cd ../../../"
-alias .....="cd ../../../../"
-alias ls="ls -B --color=tty"
-alias ll="ls -alh --color=tty"
-alias diskspace="du -hS --max-depth=1 | sort -n -r | more"
-alias rsync="rsync -avuEP"
-alias emacs="emacs -nw"
-alias nvpnreconnect="nordvpn disconnect && nordvpn connect"
-
-# -- Miscellaneous --
+source .zsh_alias
 
 set -k # Allow comments in the shell
 
 # -- Scripts --
-
-# Script to extract archives
-extract () {
-    if [ -f $1 ] ; then
-        case $1 in
-            *.tar.bz2)   tar xvjf $1    ;;
-            *.tar.gz)    tar xvzf $1    ;;
-            *.bz2)       bunzip2 $1     ;;
-            *.rar)       unrar x $1     ;;
-            *.gz)        gunzip $1      ;;
-            *.tar)       tar xvf $1     ;;
-            *.tbz2)      tar xvjf $1    ;;
-            *.tgz)       tar xvzf $1    ;;
-            *.zip)       unzip $1       ;;
-            *.Z)         uncompress $1  ;;
-            *.7z)        7z x $1        ;;
-            *)           echo "don't know how to extract '$1'..." ;;
-        esac
-    else
-        echo "'$1' is not a valid file!"
-    fi
-}
-
-# -- Harvard FAS RC Odyssey cluster --
-
-if [[ $HOSTNAME =~ .*"rclogin".* ]] || [[ $HOSTNAME =~ .*"holybicep".* ]]; then
-
-    # Source global definitions
-    if [ -f /etc/bashrc ]; then
-	. /etc/bashrc
-    fi
-
-    # enable group write permissions
-    umask 002
-
-    # find and load modules
-    if [[ $HOSTNAME =~ .*"holybicep".* ]]; then
-        module use /n/holylfs/LABS/kovac_lab/general/software/modulefiles
-        module load bicepkeck
-        # module load tmux
-    fi
-
-    # aliases
-    alias holybicep='ssh -YC jcheshire@holybicep01'
-    alias matlab='matlab -nodesktop -nosplash'
-    alias sq='squeue -u jcheshire -o "%.12i %.9P %.8u %.2t %.10M %.15R  %j"'
-    alias sqq='/usr/bin/squeue -u jcheshire -o "%.12i %.9P %.8u %.2t %.10M %.15R  %j"'
-    alias emacs='emacs -nw'
-    
-    function loadmatlab()
-    {
-        module unload matlab
-        module load bicepkeck
-        alias matlab='matlab -nodesktop -nosplash -singleCompThread'
-    }
-    function loadmatlablatest()
-    {
-        module unload bicepkeck
-        module load matlab
-        alias matlab='matlab -nodesktop -nosplash -singleCompThread'
-    }
-    
-fi
+source .zsh_scripts
 
 # -- Autocompletion --
 
@@ -135,7 +52,6 @@ setopt autocd extendedglob notify
 autoload -Uz up-line-or-beginning-search down-line-or-beginning-search
 zle -N up-line-or-beginning-search
 zle -N down-line-or-beginning-search
-
 
 # create a zkbd compatible hash;
 # to add other keys to this hash, see: man 5 terminfo
@@ -181,3 +97,40 @@ if (( ${+terminfo[smkx]} && ${+terminfo[rmkx]} )); then
 	add-zle-hook-widget -Uz zle-line-init zle_application_mode_start
 	add-zle-hook-widget -Uz zle-line-finish zle_application_mode_stop
 fi
+
+leftPrompt() {
+
+    if git rev-parse --is-inside-work-tree > /dev/null 2>&1; then
+	branchinfo="   $(git rev-parse --abbrev-ref HEAD 2>/dev/null)"
+    else
+	branchinfo=""
+    fi
+
+    if [ ! -z "${CONDA_DEFAULT_ENV}" ]; then
+	condainfo=" 🐍 ${CONDA_DEFAULT_ENV} "
+    else
+	condainfo=""
+    fi
+
+    print -v wd -n -P '%n@%M: %~${branchinfo}'
+    printf -v line '\n╭──%*s──╯' $#wd ''
+    line=${line// /─}
+    
+    directory="%F{59}%K{59}%B%F{white}%n@%F{yellow}%M: %F{cyan}%~"
+    arrows="%B%F{magenta}❯%B%F{yellow}❯%F{cyan}❯ "
+    row1="\n%B%F{green}◆ "$directory"%B%F{green}"$branchinfo"%F{59}%k─╮"
+    row2=$line
+    row3="\n╰─%B%F{magenta}${condainfo}%F{59} "$arrows
+ 
+    print $row1$row2$row3
+}
+
+rightPrompt() {
+    row1="%T"
+    print $row1
+}
+
+set-prompt() {
+    PROMPT='$(leftPrompt)'
+    RPROMPT='$(rightPrompt)'
+}
