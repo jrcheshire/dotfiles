@@ -20,12 +20,12 @@ autoload -Uz add-zsh-hook
 add-zsh-hook precmd set-prompt
 
 # -- Aliases --
-source .zsh_alias
+source ~/.zsh_alias
 
 set -k # Allow comments in the shell
 
 # -- Scripts --
-source .zsh_scripts
+source ~/.zsh_scripts
 
 # -- Autocompletion --
 
@@ -120,7 +120,7 @@ leftPrompt() {
     arrows="%B%F{magenta}❯%B%F{yellow}❯%F{cyan}❯ "
     row1="\n%B%F{green}◆ "$directory"%B%F{green}"$branchinfo"%F{59}%k─╮"
     row2=$line
-    row3="\n╰─%B%F{magenta}${condainfo}%F{59} "$arrows
+    row3="\n╰─%B%F{magenta}${condainfo}%F{59} "$arrows"%f%b"
  
     print $row1$row2$row3
 }
