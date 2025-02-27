@@ -19,6 +19,9 @@ setopt prompt_subst
 autoload -Uz add-zsh-hook
 add-zsh-hook precmd set-prompt
 
+# -- Environment --
+source ~/.zsh_env
+
 # -- Aliases --
 source ~/.zsh_alias
 
