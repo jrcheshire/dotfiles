@@ -16,8 +16,10 @@ bindkey -e
 setopt prompt_subst
 
 # -- Prompt --
-autoload -Uz add-zsh-hook
-add-zsh-hook precmd set-prompt
+if  [ "$TERM" != "dumb" ]; then
+    autoload -Uz add-zsh-hook
+    add-zsh-hook precmd set-prompt
+fi
 
 # -- Aliases --
 source ~/.zsh_alias
