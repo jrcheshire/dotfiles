@@ -21,6 +21,9 @@ if  [ "$TERM" != "dumb" ]; then
     add-zsh-hook precmd set-prompt
 fi
 
+# -- Environment --
+source ~/.zsh_env
+
 # -- Aliases --
 source ~/.zsh_alias
 
