@@ -92,19 +92,23 @@
 	lsp-idle-delay 0.5
 	lsp-client-packages nil)
   :config
-  (define-key lsp-mode-map (kbd "C-l l") lsp-command-map))
+  (define-key lsp-mode-map (kbd "C-c l") lsp-command-map))
 
 (use-package company
   :ensure t
+  :bind (:map company-active-map
+	      ("<tab>" . company-complete-selection))
+        (:map lsp-mode-map
+              ("<tab>" . company-indent-or-complete-common))
   :config
   (setq company-idle-delay 0
 	company-minimum-prefix-length 2
-	company-show-numbers t
+	company-show-numbers nil
 	company-tooltip-limit 10
 	company-tooltip-align-annotations t
 	company-tooltip-flip-when-above t)
-  (global-company-mode t)
-  )
+  (global-company-mode t))
+
 (use-package company-quickhelp
   ;; Quickhelp may incorrectly place tooltip towards end of buffer
   ;; See: https://github.com/expez/company-quickhelp/issues/72
@@ -112,6 +116,10 @@
   :config
   (company-quickhelp-mode)
   )
+
+(use-package lsp-treemacs
+  :after lsp)
+(use-package lsp-ivy)
 
 (defun python-format ()
     "Format python buffer with isort and black"
@@ -143,9 +151,9 @@
  '(inhibit-startup-screen t)
  '(package-selected-packages
    '(company company-anaconda company-quickhelp conda isortify julia-mode
-	     lsp-mode lsp-pyright lsp-ui org projectile py-isort
-	     pyenv-mode python-black python-isort pyvenv
-	     quelpa-use-package yaml-mode))
+	     lsp-ivy lsp-mode lsp-pyright lsp-treemacs lsp-ui org
+	     projectile py-isort pyenv-mode python-black python-isort
+	     pyvenv quelpa-use-package yaml-mode))
  '(tramp-default-method "ssh")
  '(tramp-password-prompt-regexp
    (concat "^.*"
