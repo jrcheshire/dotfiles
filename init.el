@@ -82,6 +82,18 @@
                           (require 'lsp-pyright)
                           (lsp))))  ; or lsp-deferred
 
+(use-package lsp-mode
+  :commands (lsp lsp-deferred)
+  :hook (lsp-mode . (lambda ()
+		      (let ((lsp-keymap-prefix "C-c l"))
+			(lsp-enable-which-key-integration))))
+  :init
+  (setq lsp-keep-workspace-alive nil
+	lsp-idle-delay 0.5
+	lsp-client-packages nil)
+  :config
+  (define-key lsp-mode-map (kbd "C-l l") lsp-command-map))
+
 (use-package company
   :ensure t
   :config
@@ -120,27 +132,28 @@
  '(ansi-color-faces-vector
    [default default default italic underline success warning error])
  '(ansi-color-names-vector
-   ["#212526" "#ff4b4b" "#b4fa70" "#fce94f" "#729fcf" "#e090d7" "#8cc4ff" "#eeeeec"])
+   ["#212526" "#ff4b4b" "#b4fa70" "#fce94f" "#729fcf" "#e090d7" "#8cc4ff"
+    "#eeeeec"])
+ '(company-quickhelp-color-background "black")
+ '(company-quickhelp-color-foreground "dim gray")
+ '(conda-anaconda-home "/home/jamie/miniforge3/")
+ '(custom-safe-themes
+   '("2925ed246fb757da0e8784ecf03b9523bccd8b7996464e587b081037e0e98001"
+     default))
  '(inhibit-startup-screen t)
- '(inhibit-startup-message t)
  '(package-selected-packages
-   '(conda isortify julia-mode lsp-ui org lsp-pyright py-isort pyenv-mode
-	   python-black python-isort pyvenv quelpa-use-package
-	   yaml-mode company projectile company-anaconda company-quickhelp))
+   '(company company-anaconda company-quickhelp conda isortify julia-mode
+	     lsp-mode lsp-pyright lsp-ui org projectile py-isort
+	     pyenv-mode python-black python-isort pyvenv
+	     quelpa-use-package yaml-mode))
  '(tramp-default-method "ssh")
  '(tramp-password-prompt-regexp
    (concat "^.*"
 	   (regexp-opt
-	    (quote
-	     ("password" "Password" "verification code" "Verification Code"))
+	    '("password" "Password" "verification code"
+	      "Verification Code")
 	    t)
-	   ".*:? *"))
-  '(custom-safe-themes
-   '("2925ed246fb757da0e8784ecf03b9523bccd8b7996464e587b081037e0e98001"
-     default))
-  '(conda-anaconda-home "/home/jamie/miniforge3/")
-  '(company-quickhelp-color-background "black")
-  '(company-quickhelp-color-foreground "dim gray"))
+	   ".*:? *")))
 
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
