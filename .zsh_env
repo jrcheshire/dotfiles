@@ -1,1 +1,4 @@
-export EDITOR='emacs -nw'
+export EDITOR='emacsclient -t'
+export VISUAL='emacsclient -t'
+export PATH="/home/jamie/.local/bin:$PATH"
+export PATH="/home/jamie/.config/emacs/bin:$PATH"
