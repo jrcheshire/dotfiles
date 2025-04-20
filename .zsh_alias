@@ -17,3 +17,5 @@ alias matlab="matlab -nodesktop -nosplash"
 
 alias ca="conda activate"
 alias cda="conda deactivate"
+alias fuck="sudo !!"
+alias kill-emacs="emacsclient -e '(kill-emacs)'"
