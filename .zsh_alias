@@ -7,7 +7,7 @@ alias ls="ls -B --color=tty"
 alias ll="ls -alh --color=tty"
 alias diskspace="du -hS --max-depth=1 | sort -n -r | more"
 alias rsync="rsync -axvuEP"
-alias emacs="emacs -nw"
+alias emacs="emacsclient -t"
 alias nvrc="nordvpn disconnect && nordvpn connect"
 alias thesiscompile='rm *.aux *.bbl *.blg *.dvi *.lof *.lot *.out *.xml *.toc ; pdflatex main && bibtex main && pdflatex main && pdflatex main'
 alias updatekitty='curl -L https://sw.kovidgoyal.net/kitty/installer.sh | sh /dev/stdin'
