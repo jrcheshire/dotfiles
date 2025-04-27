@@ -2,32 +2,25 @@
 
 cd ~/dotfiles || return
 # Sync zshell and environment setup
-rsync -av .zshrc ~
-rsync -av .zsh_alias ~
-rsync -av .zsh_env ~
-rsync -av .zsh_scripts ~
+rsync -av .zsh* ~
 # sync tmux config
 rsync -av .tmux.conf ~
 # sync ssh config
 rsync -av .ssh ~
 # conda init, if conda exists
-if ! command -v conda 2>&1 >/dev/null
+if command -v conda 2>&1 >/dev/null
 then
-    exit 0
-else
     conda init zsh
 fi
 # dom emacs setup
 rsync -av doom ~/.config/
-if ! command -v doom 2>&1 >/dev/null
+if command -v doom 2>&1 >/dev/null
 then
-    exit 0
-else
     doom sync
     if systemctl is-active --user --quiet emacs; then
-        # just doing systemctl restart randomly doesn't work...
-        systemctl --user stop emacs
+        # killing emacs is unreliable unless done through Lisp, amusingly
+        emacsclient -e '(kill-emacs)'
         sleep 5
-        systemctl --user start emacs
+        systemctl --user restart emacs
     fi
 fi
