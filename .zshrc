@@ -1,7 +1,7 @@
 # .zshrc
 # James R Cheshire IV
 #
-# last updated 2025/02/16
+# last updated 2025/04/27
 
 # -- History --
 
@@ -19,6 +19,8 @@ setopt prompt_subst
 if  [ "$TERM" != "dumb" ]; then
     autoload -Uz add-zsh-hook
     add-zsh-hook precmd set-prompt
+else
+    unsetopt zle && PS1='$ '
 fi
 
 # -- Environment --
@@ -45,7 +47,7 @@ zstyle ':completion:*' matcher-list ''
 zstyle ':completion:*' max-errors 2
 zstyle ':completion:*' substitute 1
 zstyle ':completion:*' use-compctl false
-zstyle :compinstall filename '/home/jcheshire/.zshrc'
+zstyle :compinstall filename "${HOME}/.zshrc"
 
 autoload -Uz compinit
 compinit
