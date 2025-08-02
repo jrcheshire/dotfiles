@@ -64,8 +64,15 @@
 (defun conda-env-activation-hook ()
   (conda-env-activate (getenv "CONDA_DEFAULT_ENV")))
 
-;; who watches the watchers?
-(setq lsp-enable-file-watchers nil)
+(after! lsp
+  (setq lsp-enable-file-watchers nil)
+  (setq lsp-enable-symbol-highlighting t))
+(after! lsp-ui
+  (setq lsp-ui-doc-enable t)
+  (setq lsp-ui-doc-show-with-mouse t)
+  (setq lsp-ui-doc-show-with-cursor t)
+  (setq lsp-signature-auto-activate nil)
+  (setq lsp-ui-sideline-enable t))
 
 (after! evil
   (setq evil-magic nil))
