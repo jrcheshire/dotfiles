@@ -70,24 +70,28 @@
 (after! evil
   (setq evil-magic nil))
 
+(after! smartparens
+  (remove-hook 'doom-first-buffer-hook #'smartparens-global-mode)
+  )
+
 ;; TAB-only mode for corfu
-(use-package! corfu :recipe (
-                         :custom
-                         (corfu-auto t) ;; Enable auto completion
-                         (corfu-preselect 'directory) ;; Select the first candidate, exc
+(use-package! corfu
+  :custom
+  (corfu-auto t) ;; Enable auto completion
+  (corfu-preselect 'directory) ;; Select the first candidate, exc
 
-                         :init
-                         (global-corfu-mode)
+  :init
+  (global-corfu-mode)
 
-                         :config
-                         (keymap-set corfu-map "RET" `( menu-item "" nil :filter
-                                                        ,(lambda (&optional _)
-                                                           (and (derived-mode-p 'eshell
-                                                                                #'corfu-send)))))
-                         )
+  :config
+  (keymap-set corfu-map "RET" `( menu-item "" nil :filter
+                                 ,(lambda (&optional _)
+                                    (and (derived-mode-p 'eshell
+                                                         #'corfu-send)))))
+
   )
 ;; disable smartparens
-(remove-hook 'doom-first-buffer-hook #'smartparens-global-mode)
+
 
 ;; Whenever you reconfigure a package, make sure to wrap your config in an
 ;; `after!' block, otherwise Doom's defaults may override your settings. E.g.
