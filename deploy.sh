@@ -2,17 +2,20 @@
 
 cd ~/dotfiles || return
 # Sync zshell and environment setup
-rsync -av .zsh* ~
+rsync -a .zsh* ~
 # sync tmux config
-rsync -av .tmux.conf ~
+rsync -a .tmux.conf ~
 # sync ssh config
-rsync -av .ssh ~
+rsync -a .ssh ~
+# xbindkeysrc
+rsync -a .xbindkeysrc ~
+xbindkeys --poll-rc
 # conda init, if conda exists
 if command -v conda 2>&1 >/dev/null
 then
     conda init zsh
 fi
-# dom emacs setup
+# doom emacs setup
 rsync -av doom ~/.config/
 if command -v doom 2>&1 >/dev/null
 then
