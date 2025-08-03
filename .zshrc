@@ -94,40 +94,40 @@ key[ShiftTab]="${terminfo[kcbt]}"
 # Finally, make sure the terminal is in application mode, when zle is
 # active. Only then are the values from $terminfo valid.
 if (( ${+terminfo[smkx]} && ${+terminfo[rmkx]} )); then
-	autoload -Uz add-zle-hook-widget
-	function zle_application_mode_start {
-		echoti smkx
-	}
-	function zle_application_mode_stop {
-		echoti rmkx
-	}
-	add-zle-hook-widget -Uz zle-line-init zle_application_mode_start
-	add-zle-hook-widget -Uz zle-line-finish zle_application_mode_stop
+    autoload -Uz add-zle-hook-widget
+    function zle_application_mode_start {
+        echoti smkx
+    }
+    function zle_application_mode_stop {
+        echoti rmkx
+    }
+    add-zle-hook-widget -Uz zle-line-init zle_application_mode_start
+    add-zle-hook-widget -Uz zle-line-finish zle_application_mode_stop
 fi
 
 leftPrompt() {
 
     if git rev-parse --is-inside-work-tree > /dev/null 2>&1; then
-	branchinfo="   $(git rev-parse --abbrev-ref HEAD 2>/dev/null)"
+        branchinfo="   $(git rev-parse --abbrev-ref HEAD 2>/dev/null)"
     else
-	branchinfo=""
+        branchinfo=""
     fi
 
     if [ ! -z "${CONDA_DEFAULT_ENV}" ]; then
-	condainfo=" 🐍 ${CONDA_DEFAULT_ENV} "
+        condainfo=" 🐍 ${CONDA_DEFAULT_ENV} "
     else
-	condainfo=""
+        condainfo=""
     fi
 
     print -v wd -n -P '%n@%M: %~${branchinfo}'
     printf -v line '\n╭──%*s──╯' $#wd ''
     line=${line// /─}
     
-    directory="%F{59}%K{59}%B%F{white}%n@%F{yellow}%M: %F{cyan}%~"
-    arrows="%B%F{magenta}❯%B%F{yellow}❯%F{cyan}❯ "
+    directory="%F{59}%K{59}%B%F{white}%n@%F{45}%M: %F{14}%~"
+    arrows="%B%F{27}❯%B%F{39}❯%F{14}❯ "
     row1="\n%B%F{green}◆ "$directory"%B%F{green}"$branchinfo"%F{59}%k─╮"
     row2=$line
-    row3="\n╰─%B%F{magenta}${condainfo}%F{59} "$arrows"%f%b"
+    row3="\n╰─%B%F{45}${condainfo}%F{59} "$arrows"%f%b"
  
     print $row1$row2$row3
 }
